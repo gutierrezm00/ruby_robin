@@ -1,0 +1,13 @@
+{
+  "name": "mathewswebsite",
+  "version": "0.0.1",
+  "author": "mathew",
+  "license": "LicenseRef-LICENSE",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "start": "webpack-dev-server --config ./webpack/server-dev.js",
+    "start:local": "webpack-dev-server --config ./webpack/server-local.js"
+  }
+}
