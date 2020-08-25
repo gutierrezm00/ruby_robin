@@ -1,13 +1,19 @@
 {
-  "name": "mathewswebsite",
-  "version": "0.0.1",
-  "author": "mathew",
-  "license": "LicenseRef-LICENSE",
+  "name": "frontend",
+  "version": "0.0.0",
   "private": true,
-  "dependencies": {},
-  "devDependencies": {},
   "scripts": {
-    "start": "webpack-dev-server --config ./webpack/server-dev.js",
-    "start:local": "webpack-dev-server --config ./webpack/server-local.js"
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.7.0"
   }
 }
