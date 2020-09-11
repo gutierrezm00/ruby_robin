@@ -1,14 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import App from './src/components';
+import App from './components/App';
 
 const appRoot = document.getElementById('app');
-
+console.log('test');
 const Start = () => (
-	<Provider>
-				<App />
-	</Provider>
+	<p>
+		TEST
+	</p>
+	// <Provider>
+	// 	<p>
+	// 		TEST
+	// 	</p>
+	// 			{/* <App /> */}
+	// </Provider>
 );
 
 document.addEventListener('DOMContentLoaded', () => {
