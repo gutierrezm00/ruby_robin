@@ -9,72 +9,99 @@ import numpy as np
 import random
 
 
-# username = input('Enter your username:')
-# password = getpass()
+username = input('Enter your username:')
+password = getpass()
 
-# rh = Robinhood()
+rh = Robinhood()
 
-# rh.login(username=username, password=password)
+rh.login(username=username, password=password)
 
 # print(rh.get_historical_quotes("AAPL", interval="5minute", span="3hour"))
-fig = plt.figure()
-ax1 = fig.add_subplot(1,1,1)
-
-price = 50
-time = 0
-price_array = []
-five_day_array = []
-ten_day_array = []
-hundred_day_array = []
-time_array = []
-def avg(lst):
-	return sum(lst)/len(lst)
-
-def get_data():
-	global price
-	global time
-	price = price + random.randint(-5,5)
-	time = time + 1
-
-	price_array.append(price)
+# rh.get_qoute("TSLA")
 
 
-	if(len(price_array) > 100):
-		hundred_day_array.append(avg(price_array[-100:]))
-		ten_day_array.append(avg(price_array[-10:]))
-		five_day_array.append(avg(price_array[-5:]))
-	elif(len(price_array) > 10):
-		hundred_day_array.append(price)
-		ten_day_array.append(avg(price_array[-10:]))
-		five_day_array.append(avg(price_array[-5:]))
-	elif(len(price_array) > 5):
-		five_day_array.append(avg(price_array[-5:]))
-		ten_day_array.append(price)
-		hundred_day_array.append(price)
-	else: 
-		five_day_array.append(price)
-		ten_day_array.append(price)
-		hundred_day_array.append(price)
+size = 100
+last = size-1
+yask = np.zeros([size])
+ybid = np.zeros([size])
 
-	time_array.append(time)
+yfive = np.zeros([size])
+yten = np.zeros([size])
+yminute = np.zeros([size])
 
-	return time_array,price_array,five_day_array,ten_day_array,hundred_day_array
+rask = rh.ask_price("TSLA")[0][0]
+rbid = rh.bid_price("TSLA")[0][0]
+
+yask[0] = rask
+ybid[0] = rbid
+yfive[0] = rask
+yten[0] = rask
+yminute[0] = rask
+
+xar = np.zeros(size)
+xfive = np.zeros(size)
+xten = np.zeros(size)
+xminute = np.zeros(size)
+
+fig,(ax1,ax2,ax3,ax4) = plt.subplots(4)
 
 def animate(i):
+	global xar
+	global yask
+	global ybid
+	global yfive
+	global yten 
+	global yminute 
+	global xfive 
+	global xten
+	global xminute
 
+	tsla_ask = rh.ask_price("TSLA")[0][0]
+	tsla_bid = rh.bid_price("TSLA")[0][0]
 
-	xar,yar,y5avg,y10avg,y100avg = get_data()
-	# print("animating")
-	# print("\n")
-	# print("CURRENT:", xar)
-	# print("5AVG:", y5avg)
-	# print("10AVG:", y10avg)
-	# print("time:", yar)
+	yask = np.roll(yask,-1)
+	yask[last] = tsla_ask
+
+	ybid = np.roll(ybid,-1)
+	ybid[last] = tsla_bid
+
+	xar = np.roll(xar,-1)
+	xar[last] = i
+
+	if(i % 5 == 0):
+		yfive = np.roll(yfive,-1)
+		yfive[last] = tsla_ask
+		xfive = np.roll(xfive,-1)
+		xfive[last] = i
+	if(i % 10 == 0):
+		yten = np.roll(yten,-1)
+		yten[last] = tsla_ask
+		xten = np.roll(xten,-1)
+		xten[last] = i
+	if(i % 60 == 0):
+		yminute = np.roll(yminute,-1)
+		yminute[last] = tsla_ask
+		xminute = np.roll(xminute,-1)
+		xminute[last] = i
+
 	ax1.clear()
-	ax1.plot(xar,y100avg)
-	ax1.plot(xar,y10avg)
-	ax1.plot(xar,y5avg)
-	ax1.plot(xar,yar)
+	ax2.clear()
+	ax3.clear()
+	ax4.clear()
+
+	ax1.plot(xar,yask)
+	ax1.plot(xar,ybid)
+
+	ax2.plot(xfive,yfive)
+	ax3.plot(xten,yten)
+	ax4.plot(xminute,yminute)
+
+	plt.xlabel('Time')
+	plt.ylabel('Price')
+
+	print(xar)
+
+	print(yask)
 
 	# if(len(price_array) > 100):
 	# 	ax1.plot(xar,y100avg)
@@ -87,5 +114,5 @@ def animate(i):
 	# 	ax1.plot(xar,y5avg,)
 
 
-ani = animation.FuncAnimation(fig, animate, interval=100)
+ani = animation.FuncAnimation(fig, animate, interval=1000)
 plt.show()
